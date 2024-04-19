@@ -27,7 +27,7 @@ on:
 jobs:
   setup_infra_baseline:
     name: Build Supporting Infrastructure for baseline image
-    uses: packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
     with:
       compute_gallery_rg: vaidhee-rg
       compute_gallery: vaidhee_rg_baseline_gallery
@@ -40,7 +40,7 @@ jobs:
 
   setup_infra_generalized:
     name: Build Supporting Infrastructure for generalized image
-    uses: packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
     with:
       compute_gallery_rg: vaidhee-rg
       compute_gallery: vaidhee_rg_generalized_gallery
