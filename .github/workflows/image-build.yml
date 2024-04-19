@@ -88,24 +88,3 @@ jobs:
       tenant_id: ${{ vars.TENANT_ID }}
     secrets:
       client_secret: ${{ secrets.CLIENT_SECRET }}
-
-#   deploy_vm:
-#     name: Deploy Virtual Machine
-#     if: | 
-#       always() &&
-#       github.event.inputs.deploy_vm != 'false' &&
-#       (needs.build_generalized_image.result == 'success' || needs.build_generalized_image.result == 'skipped')
-#     permissions:
-#       contents: write
-#     needs: [ setup_infra_generalized, build_generalized_image ]
-#     uses: sage/cloudops-shared-workflows/.github/workflows/deploy-vm.yml@master
-#     with:
-#       vm_name: sage-general-build
-#       compute_gallery: ${{ needs.setup_infra_generalized.outputs.compute_gallery }}
-#       key_vault: ${{ needs.setup_infra_generalized.outputs.key_vault }}
-#       client_id: ${{ vars.CLIENT_ID }}
-#       tenant_id: ${{ vars.TENANT_ID }}
-#       subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-#     secrets:
-#       client_secret: ${{ secrets.CLIENT_SECRET }}
-#       github-token: ${{ secrets.SHARED_GITHUB_TOKEN }}
