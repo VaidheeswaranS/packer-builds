@@ -91,9 +91,6 @@ source "azure-arm" "image" {
 
   # TODO: Replace with baseline image
   os_type         = var.os_type
-  // image_publisher = var.image_publisher
-  // image_offer     = var.image_offer
-  // image_sku       = var.image_sku
 
   managed_image_name                = "${var.shared_image}-${var.shared_image_version}"
   managed_image_resource_group_name = var.shared_image_gallery_rg
