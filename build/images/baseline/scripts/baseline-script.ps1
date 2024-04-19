@@ -5,6 +5,10 @@ $AquaToken = $env:AquaToken
 Write-Host "Encoded Credentials is $EncodedCredentials"
 Write-Host "Aqua Token is $AquaToken"
 
+# Installing choclatey
+echo "Downloading and Installing the chocolatey packager manager"
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
 # Specify the Node.js version
 $nodeVersion = "14.18.3"
 
