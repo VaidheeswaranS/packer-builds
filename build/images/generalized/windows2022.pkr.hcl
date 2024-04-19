@@ -59,21 +59,6 @@ variable "os_type" {
   default = "Windows"
 }
 
-// variable "image_publisher" {
-//   type    = string
-//   default = "MicrosoftWindowsServer"
-// }
-
-// variable "image_offer" {
-//   type    = string
-//   default = "WindowsServer"
-// }
-
-// variable "image_sku" {
-//   type    = string
-//   default = "2022-datacenter-g2"
-// }
-
 variable "winrm_timeout" {
   type    = string
   default = "3h"
