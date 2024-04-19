@@ -88,9 +88,7 @@ source "azure-arm" "image" {
   use_azure_cli_auth = var.use_azure_cli_auth
   location           = var.location
   vm_size            = var.vm_size
-
-  # TODO: Replace with baseline image
-  os_type         = var.os_type
+  os_type            = var.os_type
 
   managed_image_name                = "${var.shared_image}-${var.shared_image_version}"
   managed_image_resource_group_name = var.shared_image_gallery_rg
