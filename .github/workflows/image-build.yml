@@ -11,17 +11,17 @@ on:
       build_baseline_image:
         description: "Build new baseline image?"
         required: false
-        default: true
+        default: false          # should be 'true'
         type: boolean
       build_generalized_image:
         description: "Build a new generalized image?"
         required: false
-        default: true
+        default: true          # should be 'true'
         type: boolean
       deploy_vm:
         description: "Build a new VM?"
         required: false
-        default: true
+        default: false          # should be 'true'
         type: boolean
 
 jobs:

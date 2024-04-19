@@ -39,6 +39,11 @@ variable "shared_image_version" {
   default = "1.0.0"
 }
 
+variable "baseline_image_gallery_subscription" {
+  type    = string
+  default = ""
+}
+
 variable "baseline_shared_gallery_name" {
   type    = string
   default = "vaidhee_rg_baseline_gallery" 
@@ -109,7 +114,7 @@ source "azure-arm" "image" {
   managed_image_resource_group_name = var.shared_image_gallery_rg
 
   shared_image_gallery {
-    subscription   = var.shared_image_gallery_subscription
+    subscription   = var.baseline_image_gallery_subscription
     resource_group = var.shared_image_gallery_rg
     gallery_name   = var.baseline_shared_gallery_name
     image_name     = var.baseine_shared_image_name
