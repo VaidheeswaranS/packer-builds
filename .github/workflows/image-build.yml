@@ -71,7 +71,9 @@ jobs:
 
   build_generalized_image:
     name: Call Packer Build for genralized image
-    if: ${{ github.event.inputs.build_generalized_image != 'false' }}
+    if: |
+      github.event.inputs.build_generalized_image != 'false' &&
+      (needs.build_baseline_image.result == 'success' || needs.build_baseline_image.result == 'skipped' )
     permissions:
       contents: write
     needs: setup_infra_generalized
