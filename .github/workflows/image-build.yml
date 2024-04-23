@@ -18,11 +18,6 @@ on:
         required: false
         default: true
         type: boolean
-      deploy_vm:
-        description: "Build a new VM?"
-        required: false
-        default: true
-        type: boolean
 
 jobs:
   setup_infra:
@@ -65,40 +60,40 @@ jobs:
   #   secrets:
   #     client_secret: ${{ secrets.CLIENT_SECRET }}
 
-  # build_baseline_image:
-  #   name: Call Packer Build for baseline image
-  #   if: ${{ github.event.inputs.build_baseline_image != 'false' }}
-  #   permissions:
-  #     contents: write
-  #   needs: setup_infra_baseline
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
-  #   with:
-  #     packer_folder: build/images/baseline
-  #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_baseline_gallery
-  #     image_definition: vaidhee-rg-baseline-windows2022
-  #     client_id: ${{ vars.CLIENT_ID }}
-  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-  #     tenant_id: ${{ vars.TENANT_ID }}
-  #   secrets:
-  #     client_secret: ${{ secrets.CLIENT_SECRET }}
+  build_baseline_image:
+    name: Call Packer Build for baseline image
+    if: ${{ github.event.inputs.build_baseline_image != 'false' }}
+    permissions:
+      contents: write
+    needs: setup_infra
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
+    with:
+      packer_folder: build/images/baseline
+      compute_gallery_rg: vaidhee-rg
+      compute_gallery: vaidhee_rg_gallery
+      image_definition: vaidhee-rg-baseline-windows2022
+      client_id: ${{ vars.CLIENT_ID }}
+      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+      tenant_id: ${{ vars.TENANT_ID }}
+    secrets:
+      client_secret: ${{ secrets.CLIENT_SECRET }}
 
-  # build_generalized_image:
-  #   name: Call Packer Build for genralized image
-  #   if: |
-  #     github.event.inputs.build_generalized_image != 'false' &&
-  #     (needs.build_baseline_image.result == 'success' || needs.build_baseline_image.result == 'skipped')
-  #   permissions:
-  #     contents: write
-  #   needs: [setup_infra_generalized, build_baseline_image]
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
-  #   with:
-  #     packer_folder: build/images/generalized
-  #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_generalized_gallery
-  #     image_definition: vaidhee-rg-generalized-windows2022
-  #     client_id: ${{ vars.CLIENT_ID }}
-  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-  #     tenant_id: ${{ vars.TENANT_ID }}
-  #   secrets:
-  #     client_secret: ${{ secrets.CLIENT_SECRET }}
+  build_generalized_image:
+    name: Call Packer Build for genralized image
+    if: |
+      github.event.inputs.build_generalized_image != 'false' &&
+      (needs.build_baseline_image.result == 'success' || needs.build_baseline_image.result == 'skipped')
+    permissions:
+      contents: write
+    needs: [setup_infra, build_baseline_image]
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
+    with:
+      packer_folder: build/images/generalized
+      compute_gallery_rg: vaidhee-rg
+      compute_gallery: vaidhee_rg_gallery
+      image_definition: vaidhee-rg-generalized-windows2022
+      client_id: ${{ vars.CLIENT_ID }}
+      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+      tenant_id: ${{ vars.TENANT_ID }}
+    secrets:
+      client_secret: ${{ secrets.CLIENT_SECRET }}
