@@ -26,7 +26,7 @@ variable "shared_image_gallery_rg" {
 
 variable "shared_image_gallery" {
   type    = string
-  default = "vaidhee_rg_generalized_gallery"
+  default = "vaidhee_rg_gallery"
 }
 
 variable "shared_image" {
@@ -46,10 +46,10 @@ variable "baseline_image_gallery_subscription" {
 
 variable "baseline_shared_gallery_name" {
   type    = string
-  default = "vaidhee_rg_baseline_gallery" 
+  default = "vaidhee_rg_gallery"
 }
 
-variable "baseine_shared_image_name" {
+variable "baseline_shared_image_name" {
   type    = string
   default = "vaidhee-rg-baseline-windows2022"
 }
@@ -97,7 +97,7 @@ source "azure-arm" "image" {
     subscription   = var.baseline_image_gallery_subscription
     resource_group = var.shared_image_gallery_rg
     gallery_name   = var.baseline_shared_gallery_name
-    image_name     = var.baseine_shared_image_name
+    image_name     = var.baseline_shared_image_name
     image_version  = "latest"
   }
 

@@ -26,7 +26,7 @@ variable "shared_image_gallery_rg" {
 
 variable "shared_image_gallery" {
   type    = string
-  default = "vaidhee_rg_baseline_gallery"
+  default = "vaidhee_rg_gallery"
 }
 
 variable "shared_image" {
@@ -98,7 +98,6 @@ source "azure-arm" "image" {
   managed_image_name                = "${var.shared_image}-${var.shared_image_version}"
   managed_image_resource_group_name = var.shared_image_gallery_rg
 
-  # TODO: Replace with GENERAL Compute Gallery
   shared_image_gallery_destination {
     subscription        = var.shared_image_gallery_subscription
     resource_group      = var.shared_image_gallery_rg
