@@ -13,6 +13,11 @@ on:
         required: false
         default: true
         type: boolean
+      build_image:
+        description: "Build new image?"
+        required: false
+        default: true
+        type: boolean
       build_generalized_image:
         description: "Build a new generalized image?"
         required: false
@@ -69,7 +74,7 @@ jobs:
 
   build_image:
     name: Call Packer Build for image build
-    if: ${{ github.event.inputs.build_baseline_image != 'false' }}
+    if: ${{ github.event.inputs.build_image != 'false' }}
     permissions:
       contents: write
     needs: setup_infra
