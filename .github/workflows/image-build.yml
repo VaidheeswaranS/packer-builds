@@ -83,7 +83,7 @@ jobs:
       packer_folder: build/images/baseline
       compute_gallery_rg: vaidhee-rg
       compute_gallery: vaidhee_rg_gallery
-      image_definition: vaidhee-rg-generalized-windows2022
+      image_definition: vaidhee-rg-application-gen-windows2022
       client_id: ${{ vars.CLIENT_ID }}
       subscription_id: ${{ vars.SUBSCRIPTION_ID }}
       tenant_id: ${{ vars.TENANT_ID }}
