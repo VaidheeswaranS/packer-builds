@@ -18,6 +18,11 @@ on:
         required: false
         default: true
         type: boolean
+      deploy_vm:
+        description: "Build a new VM?"
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   setup_infra:
@@ -79,6 +84,27 @@ jobs:
       tenant_id: ${{ vars.TENANT_ID }}
     secrets:
       client_secret: ${{ secrets.CLIENT_SECRET }}
+
+  deploy_vm:
+    name: Deploy Virtual Machine
+    needs: [ setup_infra, build_image ]
+    if: |
+      always() &&
+      github.event.inputs.deploy_vm != 'false' &&
+      needs.setup_infra.result == 'success' &&
+      (needs.build_image.result == 'success' || needs.build_image.result == 'skipped')
+    permissions:
+      contents: write
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-vm.yml@master
+    with:
+      vm_name: sage-200-bld
+      compute_gallery: ${{ vars.COMPUTE_GALLERY }}
+      client_id: ${{ vars.CLIENT_ID }}
+      tenant_id: ${{ vars.TENANT_ID }}
+      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+    secrets:
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+      github-token: ${{ secrets.SHARED_GITHUB_TOKEN }}
 
   # build_baseline_image:
   #   name: Call Packer Build for baseline image
