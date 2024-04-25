@@ -102,8 +102,8 @@ jobs:
       contents: write
     uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-vm.yml@master
     with:
-      vm_name: vaidhee-vm-test-bld
-      compute_gallery: ${{ vars.COMPUTE_GALLERY }}
+      vm_name: vaidhee-bld
+      compute_gallery: vaidhee_rg_gallery
       client_id: ${{ vars.CLIENT_ID }}
       tenant_id: ${{ vars.TENANT_ID }}
       subscription_id: ${{ vars.SUBSCRIPTION_ID }}
