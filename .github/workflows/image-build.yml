@@ -102,7 +102,7 @@ jobs:
       contents: write
     uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-vm.yml@master
     with:
-      vm_name: sage-200-bld
+      vm_name: vaidhee-vm-test-bld
       compute_gallery: ${{ vars.COMPUTE_GALLERY }}
       client_id: ${{ vars.CLIENT_ID }}
       tenant_id: ${{ vars.TENANT_ID }}
