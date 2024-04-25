@@ -32,7 +32,7 @@ jobs:
       compute_gallery_rg: vaidhee-rg
       compute_gallery: vaidhee_rg_gallery
       image_definition_baseline: vaidhee-rg-baseline-windows2022
-      image_definition_generalized: vaidhee-rg-generalized-windows2022
+      image_definition_generalized: vaidhee-rg-application-gen-windows2022
       client_id: ${{ vars.CLIENT_ID }}
       subscription_id: ${{ vars.SUBSCRIPTION_ID }}
       tenant_id: ${{ vars.TENANT_ID }}
