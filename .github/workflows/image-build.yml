@@ -98,7 +98,7 @@ jobs:
       client_id: ${{ vars.CLIENT_ID }}
       subscription_id: ${{ vars.SUBSCRIPTION_ID }}
       tenant_id: ${{ vars.TENANT_ID }}
-      vnet_cidr: ${{ vars.VNET_CIDR }}
+      vnet_cidr: ${{ vars.VNET_SHARED_CIDR }}
       ad_group: ${{ vars.AD_GROUP }}
     secrets:
       client_secret: ${{ secrets.CLIENT_SECRET }}
