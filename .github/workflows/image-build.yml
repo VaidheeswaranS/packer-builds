@@ -31,28 +31,28 @@ on:
 
 jobs:
   ####### Built for 200 and FA #######
-  # setup_infra:
-  #   name: Build Supporting Infrastructure for Application
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
-  #   with:
-  #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_gallery
-  #     image_definition_baseline: vaidhee-rg-baseline-windows2022
-  #     image_definition_generalized: vaidhee-rg-application-gen-windows2022
-  #     client_id: ${{ vars.CLIENT_ID }}
-  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-  #     tenant_id: ${{ vars.TENANT_ID }}
-  #     vnet_cidr: ${{ vars.VNET_CIDR }}
-  #     ad_group: ${{ vars.AD_GROUP }}
-  #   secrets:
-  #     client_secret: ${{ secrets.CLIENT_SECRET }}
+  setup_infra:
+    name: Build Supporting Infrastructure for Application
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
+    with:
+      compute_gallery_rg: vaidhee-rg
+      compute_gallery: vaidhee_rg_gallery
+      image_definition_baseline: vaidhee-rg-baseline-windows2022
+      image_definition_generalized: vaidhee-rg-application-gen-windows2022
+      client_id: ${{ vars.CLIENT_ID }}
+      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+      tenant_id: ${{ vars.TENANT_ID }}
+      vnet_cidr: ${{ vars.VNET_CIDR }}
+      ad_group: ${{ vars.AD_GROUP }}
+    secrets:
+      client_secret: ${{ secrets.CLIENT_SECRET }}
 
   build_image:
     name: Packer Build for Application Image
     if: ${{ github.event.inputs.build_image != 'false' }}
     permissions:
       contents: write
-    # needs: setup_infra
+    needs: setup_infra
     uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
     with:
       packer_folder: build/images/baseline
@@ -67,7 +67,7 @@ jobs:
 
   deploy_vm:
     name: Deploy Virtual Machine for Application Image
-    # needs: [ setup_infra, build_image ]
+    needs: [ setup_infra, build_image ]
     if: |
       always() &&
       github.event.inputs.deploy_vm != 'false' &&
@@ -140,38 +140,3 @@ jobs:
       tenant_id: ${{ vars.TENANT_ID }}
     secrets:
       client_secret: ${{ secrets.CLIENT_SECRET }}
-
-
-
-
-
-
-
-
-
-
-  # setup_infra_baseline:
-  #   name: Build Supporting Infrastructure for baseline image
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
-  #   with:
-  #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_baseline_gallery
-  #     image_definition: vaidhee-rg-baseline-windows2022
-  #     client_id: ${{ vars.CLIENT_ID }}
-  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-  #     tenant_id: ${{ vars.TENANT_ID }}
-  #   secrets:
-  #     client_secret: ${{ secrets.CLIENT_SECRET }}
-
-  # setup_infra_generalized:
-  #   name: Build Supporting Infrastructure for generalized image
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
-  #   with:
-  #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_generalized_gallery
-  #     image_definition: vaidhee-rg-generalized-windows2022
-  #     client_id: ${{ vars.CLIENT_ID }}
-  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-  #     tenant_id: ${{ vars.TENANT_ID }}
-  #   secrets:
-  #     client_secret: ${{ secrets.CLIENT_SECRET }}
