@@ -109,7 +109,6 @@ jobs:
       subscription_id: ${{ vars.SUBSCRIPTION_ID }}
     secrets:
       client_secret: ${{ secrets.CLIENT_SECRET }}
-      github-token: ${{ secrets.SHARED_GITHUB_TOKEN }}
 
   # build_baseline_image:
   #   name: Call Packer Build for baseline image
