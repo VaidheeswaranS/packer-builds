@@ -8,18 +8,8 @@ on:
     - 'build/images/**'
   workflow_dispatch:
     inputs:
-      build_baseline_image:
-        description: "Build new baseline image?"
-        required: false
-        default: true
-        type: boolean
       build_image:
         description: "Build new image?"
-        required: false
-        default: true
-        type: boolean
-      build_generalized_image:
-        description: "Build a new generalized image?"
         required: false
         default: true
         type: boolean
@@ -28,8 +18,19 @@ on:
         required: false
         default: true
         type: boolean
+      build_baseline_image:
+        description: "Build new baseline image?"
+        required: false
+        default: true
+        type: boolean
+      build_generalized_image:
+        description: "Build a new generalized image?"
+        required: false
+        default: true
+        type: boolean
 
 jobs:
+  ####### Built for 200 and FA #######
   setup_infra:
     name: Build Supporting Infrastructure
     uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
@@ -45,32 +46,6 @@ jobs:
       ad_group: ${{ vars.AD_GROUP }}
     secrets:
       client_secret: ${{ secrets.CLIENT_SECRET }}
-
-  # setup_infra_baseline:
-  #   name: Build Supporting Infrastructure for baseline image
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
-  #   with:
-  #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_baseline_gallery
-  #     image_definition: vaidhee-rg-baseline-windows2022
-  #     client_id: ${{ vars.CLIENT_ID }}
-  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-  #     tenant_id: ${{ vars.TENANT_ID }}
-  #   secrets:
-  #     client_secret: ${{ secrets.CLIENT_SECRET }}
-
-  # setup_infra_generalized:
-  #   name: Build Supporting Infrastructure for generalized image
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
-  #   with:
-  #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_generalized_gallery
-  #     image_definition: vaidhee-rg-generalized-windows2022
-  #     client_id: ${{ vars.CLIENT_ID }}
-  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-  #     tenant_id: ${{ vars.TENANT_ID }}
-  #   secrets:
-  #     client_secret: ${{ secrets.CLIENT_SECRET }}
 
   build_image:
     name: Call Packer Build for image build
@@ -110,38 +85,90 @@ jobs:
     secrets:
       client_secret: ${{ secrets.CLIENT_SECRET }}
 
-  # build_baseline_image:
-  #   name: Call Packer Build for baseline image
-  #   if: ${{ github.event.inputs.build_baseline_image != 'false' }}
-  #   permissions:
-  #     contents: write
-  #   needs: setup_infra
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
+  
+  ####### Built for Shared Image Gallery for both Baseline and Generelized #######
+  setup_infra_shared:
+    name: Build Supporting Infrastructure
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
+    with:
+      compute_gallery_rg: vaidhee-shared-rg
+      compute_gallery: vaidhee_shared_rg_gallery
+      image_definition_baseline: vaidhee-shared-baseline-windows2022
+      image_definition_generalized: vaidhee-shared-generalized-windows2022
+      client_id: ${{ vars.CLIENT_ID }}
+      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+      tenant_id: ${{ vars.TENANT_ID }}
+      vnet_cidr: ${{ vars.VNET_CIDR }}
+      ad_group: ${{ vars.AD_GROUP }}
+    secrets:
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+
+  build_baseline_image:
+    name: Call Packer Build for baseline image
+    if: ${{ github.event.inputs.build_baseline_image != 'false' }}
+    permissions:
+      contents: write
+    needs: setup_infra_shared
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
+    with:
+      packer_folder: build/images/baseline-shared
+      compute_gallery_rg: vaidhee-shared-rg
+      compute_gallery: vaidhee_shared_rg_gallery
+      image_definition: vaidhee-shared-baseline-windows2022
+      client_id: ${{ vars.CLIENT_ID }}
+      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+      tenant_id: ${{ vars.TENANT_ID }}
+    secrets:
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+
+  build_generalized_image:
+    name: Call Packer Build for generalized image
+    if: |
+      github.event.inputs.build_generalized_image != 'false' &&
+      (needs.build_baseline_image.result == 'success' || needs.build_baseline_image.result == 'skipped')
+    permissions:
+      contents: write
+    needs: [setup_infra_shared, build_baseline_image]
+    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
+    with:
+      packer_folder: build/images/baseline-generalized
+      compute_gallery_rg: vaidhee-shared-rg
+      compute_gallery: vaidhee_shared_rg_gallery
+      image_definition: vaidhee-shared-generalized-windows2022
+      client_id: ${{ vars.CLIENT_ID }}
+      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+      tenant_id: ${{ vars.TENANT_ID }}
+    secrets:
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+
+
+
+
+
+
+
+
+
+
+  # setup_infra_baseline:
+  #   name: Build Supporting Infrastructure for baseline image
+  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
   #   with:
-  #     packer_folder: build/images/baseline
   #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_gallery
-  #     image_definition_baseline: vaidhee-rg-baseline-windows2022
-  #     image_definition_generalized: vaidhee-rg-generalized-windows2022
+  #     compute_gallery: vaidhee_rg_baseline_gallery
+  #     image_definition: vaidhee-rg-baseline-windows2022
   #     client_id: ${{ vars.CLIENT_ID }}
   #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
   #     tenant_id: ${{ vars.TENANT_ID }}
   #   secrets:
   #     client_secret: ${{ secrets.CLIENT_SECRET }}
 
-  # build_generalized_image:
-  #   name: Call Packer Build for genralized image
-  #   if: |
-  #     github.event.inputs.build_generalized_image != 'false' &&
-  #     (needs.build_baseline_image.result == 'success' || needs.build_baseline_image.result == 'skipped')
-  #   permissions:
-  #     contents: write
-  #   needs: [setup_infra, build_baseline_image]
-  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
+  # setup_infra_generalized:
+  #   name: Build Supporting Infrastructure for generalized image
+  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery.yml@master
   #   with:
-  #     packer_folder: build/images/generalized
   #     compute_gallery_rg: vaidhee-rg
-  #     compute_gallery: vaidhee_rg_gallery
+  #     compute_gallery: vaidhee_rg_generalized_gallery
   #     image_definition: vaidhee-rg-generalized-windows2022
   #     client_id: ${{ vars.CLIENT_ID }}
   #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
