@@ -87,21 +87,21 @@ jobs:
 
   
   ####### Built for Shared Image Gallery for both Baseline and Generelized #######
-  setup_infra_shared:
-    name: Build Supporting Infrastructure for Shared Images
-    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
-    with:
-      compute_gallery_rg: vaidhee-shared-rg
-      compute_gallery: vaidhee_shared_rg_gallery
-      image_definition_baseline: vaidhee-shared-baseline-windows2022
-      image_definition_generalized: vaidhee-shared-generalized-windows2022
-      client_id: ${{ vars.CLIENT_ID }}
-      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-      tenant_id: ${{ vars.TENANT_ID }}
-      vnet_cidr: ${{ vars.VNET_SHARED_CIDR }}
-      ad_group: ${{ vars.AD_GROUP }}
-    secrets:
-      client_secret: ${{ secrets.CLIENT_SECRET }}
+  # setup_infra_shared:
+  #   name: Build Supporting Infrastructure for Shared Images
+  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
+  #   with:
+  #     compute_gallery_rg: vaidhee-shared-rg
+  #     compute_gallery: vaidhee_shared_rg_gallery
+  #     image_definition_baseline: vaidhee-shared-baseline-windows2022
+  #     image_definition_generalized: vaidhee-shared-generalized-windows2022
+  #     client_id: ${{ vars.CLIENT_ID }}
+  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+  #     tenant_id: ${{ vars.TENANT_ID }}
+  #     vnet_cidr: ${{ vars.VNET_SHARED_CIDR }}
+  #     ad_group: ${{ vars.AD_GROUP }}
+  #   secrets:
+  #     client_secret: ${{ secrets.CLIENT_SECRET }}
 
   build_baseline_image:
     name: Packer Build for Baseline Image
