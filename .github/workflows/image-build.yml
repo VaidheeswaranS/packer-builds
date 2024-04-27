@@ -43,6 +43,7 @@ jobs:
   ####### Built for Shared Image Gallery for both Baseline and Generelized #######
   setup_infra_shared:
     name: Build Supporting Infrastructure for Shared Images
+    if: ${{ github.event.inputs.setup_infra_shared != false }}
     uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
     with:
       compute_gallery_rg: vaidhee-shared-rg
@@ -101,6 +102,7 @@ jobs:
   ####### Built for 200 and FA #######
   setup_infra:
     name: Build Supporting Infrastructure for Application
+    if: ${{ github.event.inputs.setup_infra != false }}
     uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
     with:
       compute_gallery_rg: vaidhee-rg
