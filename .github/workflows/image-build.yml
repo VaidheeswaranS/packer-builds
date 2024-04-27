@@ -8,6 +8,11 @@ on:
     - 'build/images/**'
   workflow_dispatch:
     inputs:
+      setup_infra_shared:
+        description: "Build Spoorting Infra for shared images?"
+        required: false
+        default: true
+        type: boolean
       build_baseline_image:
         description: "Build new baseline image?"
         required: false
@@ -15,6 +20,11 @@ on:
         type: boolean
       build_generalized_image:
         description: "Build a new generalized image?"
+        required: false
+        default: true
+        type: boolean
+      setup_infra:
+        description: "Build Spoorting Infra for application images?"
         required: false
         default: true
         type: boolean
@@ -86,6 +96,8 @@ jobs:
       tenant_id: ${{ vars.TENANT_ID }}
     secrets:
       client_secret: ${{ secrets.CLIENT_SECRET }}
+
+
   ####### Built for 200 and FA #######
   setup_infra:
     name: Build Supporting Infrastructure for Application
