@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       setup_infra_shared:
-        description: "Build Spoorting Infra for shared images?"
+        description: "Build Supporting Infra for shared images?"
         required: false
         default: true
         type: boolean
@@ -24,7 +24,7 @@ on:
         default: true
         type: boolean
       setup_infra:
-        description: "Build Spoorting Infra for application images?"
+        description: "Build Supporting Infra for application images?"
         required: false
         default: true
         type: boolean
@@ -103,6 +103,7 @@ jobs:
   setup_infra:
     name: Build Supporting Infrastructure for Application
     if: ${{ github.event.inputs.setup_infra != false }}
+    needs: [build_baseline_image]
     uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
     with:
       compute_gallery_rg: vaidhee-rg
