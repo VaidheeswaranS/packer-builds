@@ -76,10 +76,12 @@ variable "vm_size" {
 
 variable "encoded_credentials" {
   type    = string
+  default = ""
 }
 
 variable "aqua_token" {
   type    = string
+  default = ""
 }
 
 source "azure-arm" "image" {
