@@ -8,11 +8,6 @@ on:
     - 'build/images/**'
   workflow_dispatch:
     inputs:
-      setup_infra_shared:
-        description: "Build Supporting Infra for shared images?"
-        required: false
-        default: true
-        type: boolean
       build_baseline_image:
         description: "Build new baseline image?"
         required: false
@@ -20,11 +15,6 @@ on:
         type: boolean
       build_generalized_image:
         description: "Build a new generalized image?"
-        required: false
-        default: true
-        type: boolean
-      setup_infra:
-        description: "Build Supporting Infra for application images?"
         required: false
         default: true
         type: boolean
@@ -43,7 +33,6 @@ jobs:
   ####### Built for Shared Image Gallery for both Baseline and Generelized #######
   setup_infra_shared:
     name: Build Supporting Infrastructure for Shared Images
-    if: ${{ github.event.inputs.setup_infra_shared != false }}
     uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
     with:
       compute_gallery_rg: vaidhee-shared-rg
@@ -100,23 +89,21 @@ jobs:
 
 
   ####### Built for 200 and FA #######
-  setup_infra:
-    name: Build Supporting Infrastructure for Application
-    if: ${{ github.event.inputs.setup_infra != false }}
-    needs: [build_baseline_image]
-    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
-    with:
-      compute_gallery_rg: vaidhee-rg
-      compute_gallery: vaidhee_rg_gallery
-      image_definition_baseline: vaidhee-rg-baseline-windows2022
-      image_definition_generalized: vaidhee-rg-application-gen-windows2022
-      client_id: ${{ vars.CLIENT_ID }}
-      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-      tenant_id: ${{ vars.TENANT_ID }}
-      vnet_cidr: ${{ vars.VNET_CIDR }}
-      ad_group: ${{ vars.AD_GROUP }}
-    secrets:
-      client_secret: ${{ secrets.CLIENT_SECRET }}
+  # setup_infra:
+  #   name: Build Supporting Infrastructure for Application
+  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-gallery-2.yml@master
+  #   with:
+  #     compute_gallery_rg: vaidhee-rg
+  #     compute_gallery: vaidhee_rg_gallery
+  #     image_definition_baseline: vaidhee-rg-baseline-windows2022
+  #     image_definition_generalized: vaidhee-rg-application-gen-windows2022
+  #     client_id: ${{ vars.CLIENT_ID }}
+  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+  #     tenant_id: ${{ vars.TENANT_ID }}
+  #     vnet_cidr: ${{ vars.VNET_CIDR }}
+  #     ad_group: ${{ vars.AD_GROUP }}
+  #   secrets:
+  #     client_secret: ${{ secrets.CLIENT_SECRET }}
 
   build_image:
     name: Packer Build for Application Image

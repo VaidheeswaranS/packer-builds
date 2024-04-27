@@ -111,7 +111,7 @@ build {
   sources = ["azure-arm.image"]
 
   provisioner "powershell" {
-    script = "../scripts/genralized-script.ps1"
+    script = "../scripts/generalized-script.ps1"
   }
 
   provisioner "powershell" {
