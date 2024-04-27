@@ -76,12 +76,12 @@ variable "vm_size" {
 
 variable "encoded_credentials" {
   type    = string
-  default = ""
+  default = null
 }
 
 variable "aqua_token" {
   type    = string
-  default = ""
+  default = null
 }
 
 source "azure-arm" "image" {
@@ -89,7 +89,6 @@ source "azure-arm" "image" {
   location           = var.location
   vm_size            = var.vm_size
 
-  # TODO: Replace with baseline image
   os_type         = var.os_type
   image_publisher = var.image_publisher
   image_offer     = var.image_offer
@@ -120,10 +119,10 @@ build {
   provisioner "powershell" {
     environment_vars = ["EncodedCredentials=${var.encoded_credentials}",
                         "AquaToken=${var.aqua_token}"]
-    script = "./scripts/baseline-script.ps1"
+    script = "../scripts/baseline-script.ps1"
   }
 
   provisioner "powershell" {
-    script = "./scripts/sysprep.ps1"
+    script = "../scripts/sysprep.ps1"
   }
 }

@@ -21,17 +21,17 @@ variable "shared_image_gallery_subscription" {
 
 variable "shared_image_gallery_rg" {
   type    = string
-  default = "vaidhee-shared-rg"
+  default = "vaidhee-rg"
 }
 
 variable "shared_image_gallery" {
   type    = string
-  default = "vaidhee_shared_rg_gallery"
+  default = "vaidhee_rg_gallery"
 }
 
 variable "shared_image" {
   type    = string
-  default = "vaidhee-shared-generalized-windows2022"
+  default = "vaidhee-rg-application-windows2022"
 }
 
 variable "shared_image_version" {
@@ -41,7 +41,7 @@ variable "shared_image_version" {
 
 variable "baseline_image_gallery_subscription" {
   type    = string
-  default = ""
+  default = null
 }
 
 variable "baseline_shared_gallery_name" {
@@ -72,16 +72,6 @@ variable "location" {
 variable "vm_size" {
   type    = string
   default = "Standard_DS2_v2"
-}
-
-variable "encoded_credentials" {
-  type    = string
-  default = ""
-}
-
-variable "aqua_token" {
-  type    = string
-  default = ""
 }
 
 source "azure-arm" "image" {
@@ -121,10 +111,10 @@ build {
   sources = ["azure-arm.image"]
 
   provisioner "powershell" {
-    script = "./scripts/consolidated-scripts.ps1"
+    script = "../scripts/app-script.ps1"
   }
 
   provisioner "powershell" {
-    script = "./scripts/sysprep.ps1"
+    script = "../scripts/sysprep.ps1"
   }
 }
