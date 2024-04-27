@@ -105,40 +105,40 @@ jobs:
   #   secrets:
   #     client_secret: ${{ secrets.CLIENT_SECRET }}
 
-  build_image:
-    name: Packer Build for Application Image
-    if: ${{ github.event.inputs.build_image != 'false' }}
-    permissions:
-      contents: write
-    needs: setup_infra
-    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
-    with:
-      packer_folder: build/images/baseline
-      compute_gallery_rg: vaidhee-rg
-      compute_gallery: vaidhee_rg_gallery
-      image_definition: vaidhee-rg-application-gen-windows2022
-      client_id: ${{ vars.CLIENT_ID }}
-      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-      tenant_id: ${{ vars.TENANT_ID }}
-    secrets:
-      client_secret: ${{ secrets.CLIENT_SECRET }}
+  # build_image:
+  #   name: Packer Build for Application Image
+  #   if: ${{ github.event.inputs.build_image != 'false' }}
+  #   permissions:
+  #     contents: write
+  #   needs: setup_infra
+  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/packer-build.yml@master
+  #   with:
+  #     packer_folder: build/images/baseline
+  #     compute_gallery_rg: vaidhee-rg
+  #     compute_gallery: vaidhee_rg_gallery
+  #     image_definition: vaidhee-rg-application-gen-windows2022
+  #     client_id: ${{ vars.CLIENT_ID }}
+  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+  #     tenant_id: ${{ vars.TENANT_ID }}
+  #   secrets:
+  #     client_secret: ${{ secrets.CLIENT_SECRET }}
 
-  deploy_vm:
-    name: Deploy Virtual Machine for Application Image
-    needs: [ setup_infra, build_image ]
-    if: |
-      always() &&
-      github.event.inputs.deploy_vm != 'false' &&
-      needs.setup_infra.result == 'success' &&
-      (needs.build_image.result == 'success' || needs.build_image.result == 'skipped')
-    permissions:
-      contents: write
-    uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-vm.yml@master
-    with:
-      vm_name: vaidhee-bld
-      compute_gallery: vaidhee_rg_gallery
-      client_id: ${{ vars.CLIENT_ID }}
-      tenant_id: ${{ vars.TENANT_ID }}
-      subscription_id: ${{ vars.SUBSCRIPTION_ID }}
-    secrets:
-      client_secret: ${{ secrets.CLIENT_SECRET }}
+  # deploy_vm:
+  #   name: Deploy Virtual Machine for Application Image
+  #   needs: [ setup_infra, build_image ]
+  #   if: |
+  #     always() &&
+  #     github.event.inputs.deploy_vm != 'false' &&
+  #     needs.setup_infra.result == 'success' &&
+  #     (needs.build_image.result == 'success' || needs.build_image.result == 'skipped')
+  #   permissions:
+  #     contents: write
+  #   uses: VaidheeswaranS/packer-builds-shared-workflows/.github/workflows/deploy-vm.yml@master
+  #   with:
+  #     vm_name: vaidhee-bld
+  #     compute_gallery: vaidhee_rg_gallery
+  #     client_id: ${{ vars.CLIENT_ID }}
+  #     tenant_id: ${{ vars.TENANT_ID }}
+  #     subscription_id: ${{ vars.SUBSCRIPTION_ID }}
+  #   secrets:
+  #     client_secret: ${{ secrets.CLIENT_SECRET }}
